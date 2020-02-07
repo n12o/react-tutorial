@@ -20,19 +20,22 @@ function Square(props) {
 }
 
 function Board(props) {
+  //create representation of board rows and indexes
   const rows = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8]
   ];
 
+  //Destructure winner row into winner square indexes
   let [win1, win2, win3] = props.winners || [false, false, false];
 
-  const squareB = rows.map(row => {
+  const squareBlock = rows.map(row => {
     return (
       <div key={row[1] + 11} className='board-row'>
         {row.map(i => (
           <Square
+            //If square index is a winner props.winner equals true
             winner={win1 === i || win2 === i || win3 === i}
             key={i}
             value={props.squares[i]}
@@ -43,10 +46,11 @@ function Board(props) {
     );
   });
 
-  return <div>{squareB}</div>;
+  return <div>{squareBlock}</div>;
 }
 
 function Game() {
+  //Create state
   const [history, setHistory] = useState([
     {
       squares: Array(9).fill(null),
@@ -56,8 +60,11 @@ function Game() {
   const [xIsNext, setXIsNext] = useState(true);
   const [stepNumber, setStepNumber] = useState(0);
   const [reverse, setReverse] = useState(false);
+  //End of states
 
+  //Array of current squares
   const current = history[stepNumber];
+  //Returns array of winners (line) and player who won (X or O)
   const [winners, winner] = calculateWinner(current.squares) || [false, false];
 
   const bold = {
@@ -67,7 +74,7 @@ function Game() {
   //Create history array
   const moves = history.map((step, move) => {
     const desc = move
-      ? `Go to move#${move} ${findLocation(step.location)}`
+      ? `Go to move#${move} ${locationString(step.location)}`
       : 'Go to game start';
     return (
       <li key={move}>
@@ -81,7 +88,7 @@ function Game() {
     );
   });
 
-  //create reverse history array
+  //Create reverse history array
   const revMoves = Array.from(moves).reverse();
 
   //Set status message
@@ -98,6 +105,7 @@ function Game() {
     const newHistory = history.slice(0, stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
+    //Do nothing if game is won or clicked twice on the same square
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
@@ -121,7 +129,7 @@ function Game() {
     <div className='game'>
       <div className='game-board'>
         <Board
-          winners={winners ? winners : false} //pass array of winners
+          winners={winners ? winners : false} //pass array of winners if game is won
           squares={current.squares}
           onClick={i => handleClick(i)}
         />
@@ -166,7 +174,7 @@ function calculateWinner(squares) {
   return null;
 }
 
-function findLocation(location) {
+function locationString(location) {
   return `(col${findCol(location)}, row${findRow(location)})`;
 }
 
