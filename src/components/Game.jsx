@@ -90,7 +90,8 @@ export default function Game() {
         <div>{status}</div>
         <ol>{reverse ? revMoves : moves}</ol>
       </div>
-      <div>
+      <div className='toggle-reverse'>
+        <label htmlFor='reverse'>History in descending order</label>
         <input
           onClick={() => setReverse(reverse ? false : true)}
           type='checkbox'
