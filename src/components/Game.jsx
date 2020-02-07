@@ -13,11 +13,12 @@ export default function Game() {
   const [stepNumber, setStepNumber] = useState(0);
   const [reverse, setReverse] = useState(false);
   //End of states
-
+  console.log(stepNumber);
   //Array of current squares
-  const current = history[stepNumber];
+  const current = history[stepNumber] || history[0];
+  console.log(current);
   //Returns array of winners (line) and player who won (X or O)
-  const [winners, winner] = calculateWinner(current.squares) || [false, false];
+  const [winners, winner] = calculateWinner(current) || [false, false];
 
   const bold = {
     fontWeight: 'bold'
@@ -55,7 +56,7 @@ export default function Game() {
 
   function handleClick(i) {
     const newHistory = history.slice(0, stepNumber + 1);
-    const current = history[history.length - 1];
+    const current = history[newHistory.length - 1];
     const squares = current.squares.slice();
     //Do nothing if game is won or clicked twice on the same square
     if (calculateWinner(squares) || squares[i]) {
@@ -69,7 +70,7 @@ export default function Game() {
       })
     );
     setXIsNext(!xIsNext);
-    setStepNumber(history.length);
+    setStepNumber(newHistory.length);
   }
 
   function jumpTo(step) {
@@ -104,7 +105,13 @@ export default function Game() {
 }
 
 //Functions
-function calculateWinner(squares) {
+function calculateWinner(current) {
+  let squares;
+  if (!current || !current.squares) {
+    return false;
+  } else {
+    squares = current.squares;
+  }
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
