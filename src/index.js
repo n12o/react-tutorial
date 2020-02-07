@@ -48,11 +48,20 @@ function Game() {
   const current = history[stepNumber];
   const winner = calculateWinner(current.squares);
 
+  const bold = {
+    fontWeight: 'bold'
+  };
+
   const moves = history.map((step, move) => {
     const desc = move ? 'Go to move #' + move : 'Go to game start';
     return (
       <li key={move}>
-        <button onClick={() => jumpTo(move)}>{desc}</button>
+        <button
+          style={move === stepNumber ? bold : {}}
+          onClick={() => jumpTo(move)}
+        >
+          {desc}
+        </button>
       </li>
     );
   });
