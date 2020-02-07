@@ -42,6 +42,7 @@ function Game() {
   ]);
   const [xIsNext, setXIsNext] = useState(true);
   const [stepNumber, setStepNumber] = useState(0);
+  const [reverse, setReverse] = useState(false);
 
   const current = history[stepNumber];
   const winner = calculateWinner(current.squares);
@@ -63,6 +64,9 @@ function Game() {
       </li>
     );
   });
+
+  const revMoves = Array.from(moves).reverse();
+
   let status;
   if (winner) {
     status = 'Winner: ' + winner;
@@ -99,7 +103,15 @@ function Game() {
       </div>
       <div className='game-info'>
         <div>{status}</div>
-        <ol>{moves}</ol>
+        <ol>{reverse ? revMoves : moves}</ol>
+      </div>
+      <div>
+        <input
+          onClick={() => setReverse(reverse ? false : true)}
+          type='checkbox'
+          name='reverse'
+          id='reverse'
+        />
       </div>
     </div>
   );
