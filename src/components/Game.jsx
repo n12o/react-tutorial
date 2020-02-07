@@ -13,10 +13,9 @@ export default function Game() {
   const [stepNumber, setStepNumber] = useState(0);
   const [reverse, setReverse] = useState(false);
   //End of states
-  console.log(stepNumber);
+
   //Array of current squares
   const current = history[stepNumber] || history[0];
-  console.log(current);
   //Returns array of winners (line) and player who won (X or O)
   const [winners, winner] = calculateWinner(current) || [false, false];
 
@@ -59,7 +58,7 @@ export default function Game() {
     const current = history[newHistory.length - 1];
     const squares = current.squares.slice();
     //Do nothing if game is won or clicked twice on the same square
-    if (calculateWinner(squares) || squares[i]) {
+    if (calculateWinner(current) || squares[i]) {
       return;
     }
     squares[i] = xIsNext ? 'X' : 'O';
