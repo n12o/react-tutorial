@@ -3,8 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
+  const highlight = {
+    color: 'white',
+    backgroundColor: 'brown'
+  };
+
   return (
-    <button className='square' onClick={props.onClick}>
+    <button
+      style={props.winner ? highlight : {}}
+      className='square'
+      onClick={props.onClick}
+    >
       {props.value}
     </button>
   );
@@ -17,11 +26,14 @@ function Board(props) {
     [6, 7, 8]
   ];
 
+  let [win1, win2, win3] = props.winners || [false, false, false];
+
   const squareB = rows.map(row => {
     return (
       <div key={row[1] + 11} className='board-row'>
         {row.map(i => (
           <Square
+            winner={win1 === i || win2 === i || win3 === i}
             key={i}
             value={props.squares[i]}
             onClick={() => props.onClick(i)}
@@ -45,7 +57,7 @@ function Game() {
   const [reverse, setReverse] = useState(false);
 
   const current = history[stepNumber];
-  const winner = calculateWinner(current.squares);
+  const [winners, winner] = calculateWinner(current.squares) || [false, false];
 
   const bold = {
     fontWeight: 'bold'
@@ -99,7 +111,11 @@ function Game() {
   return (
     <div className='game'>
       <div className='game-board'>
-        <Board squares={current.squares} onClick={i => handleClick(i)} />
+        <Board
+          winners={winners ? winners : false}
+          squares={current.squares}
+          onClick={i => handleClick(i)}
+        />
       </div>
       <div className='game-info'>
         <div>{status}</div>
@@ -135,7 +151,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return [lines[i], squares[a]];
     }
   }
   return null;
