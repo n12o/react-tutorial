@@ -49,7 +49,8 @@ function Board(props) {
 function Game() {
   const [history, setHistory] = useState([
     {
-      squares: Array(9).fill(null)
+      squares: Array(9).fill(null),
+      location: null
     }
   ]);
   const [xIsNext, setXIsNext] = useState(true);
@@ -63,8 +64,11 @@ function Game() {
     fontWeight: 'bold'
   };
 
+  //Create history array
   const moves = history.map((step, move) => {
-    const desc = move ? 'Go to move #' + move : 'Go to game start';
+    const desc = move
+      ? `Go to move#${move} ${findLocation(step.location)}`
+      : 'Go to game start';
     return (
       <li key={move}>
         <button
@@ -77,8 +81,10 @@ function Game() {
     );
   });
 
+  //create reverse history array
   const revMoves = Array.from(moves).reverse();
 
+  //Set status message
   let status;
   if (winner) {
     status = 'Winner: ' + winner;
@@ -98,7 +104,8 @@ function Game() {
     squares[i] = xIsNext ? 'X' : 'O';
     setHistory(
       newHistory.concat({
-        squares: squares
+        squares: squares,
+        location: i
       })
     );
     setXIsNext(!xIsNext);
@@ -114,7 +121,7 @@ function Game() {
     <div className='game'>
       <div className='game-board'>
         <Board
-          winners={winners ? winners : false}
+          winners={winners ? winners : false} //pass array of winners
           squares={current.squares}
           onClick={i => handleClick(i)}
         />
@@ -157,4 +164,28 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function findLocation(location) {
+  return `(col${findCol(location)}, row${findRow(location)})`;
+}
+
+function findCol(square) {
+  if (square === 0 || square === 3 || square === 6) {
+    return 1;
+  } else if (square === 1 || square === 4 || square === 7) {
+    return 2;
+  } else {
+    return 3;
+  }
+}
+
+function findRow(square) {
+  if (square === 0 || square === 1 || square === 2) {
+    return 1;
+  } else if (square === 3 || square === 4 || square === 5) {
+    return 2;
+  } else {
+    return 3;
+  }
 }
