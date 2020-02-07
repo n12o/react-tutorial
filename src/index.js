@@ -11,29 +11,27 @@ function Square(props) {
 }
 
 function Board(props) {
-  let renderSquare = i => {
-    return <Square value={props.squares[i]} onClick={() => props.onClick(i)} />;
-  };
+  const rows = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8]
+  ];
 
-  return (
-    <div>
-      <div className='board-row'>
-        {renderSquare(0)}
-        {renderSquare(1)}
-        {renderSquare(2)}
+  const squareB = rows.map(row => {
+    return (
+      <div key={row[1] + 11} className='board-row'>
+        {row.map(i => (
+          <Square
+            key={i}
+            value={props.squares[i]}
+            onClick={() => props.onClick(i)}
+          />
+        ))}
       </div>
-      <div className='board-row'>
-        {renderSquare(3)}
-        {renderSquare(4)}
-        {renderSquare(5)}
-      </div>
-      <div className='board-row'>
-        {renderSquare(6)}
-        {renderSquare(7)}
-        {renderSquare(8)}
-      </div>
-    </div>
-  );
+    );
+  });
+
+  return <div>{squareB}</div>;
 }
 
 function Game() {
